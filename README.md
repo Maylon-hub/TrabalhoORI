@@ -10,6 +10,6 @@ Palavra Igual: Se a posição já está ocupada e a palavra que gerou o hash é 
 Palavra Diferente: Se a posição está ocupada e a palavra é diferente, a função realiza uma sondagem linear para encontrar uma nova posição. Durante a sondagem, a função pode retornar aos passos anteriores e tentar inserir a palavra em uma nova posição adequada.
 
 Autores:
--Guilherme Silva Castro 769763
--Laura Mota Brentano 800522
+-Guilherme Silva Castro 769763,
+-Laura Mota Brentano 800522,
 -Maylon Martins de Melo 800199
