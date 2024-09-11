@@ -1,9 +1,15 @@
+// Autores:
+// Guilherme Silva Castro 769763
+// Laura Mota Brentano 800522
+// Maylon Martins de Melo 800199
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-#define TABLE_SIZE 100 // Tamanho da tabela hash
+// Tamanho da tabela hash
+#define TABLE_SIZE 1578630 
 
 // Estrutura para lista de inteiros
 typedef struct IntListNode {
@@ -31,12 +37,34 @@ IntListNode *create_int_list_node(int value) {
     return new_node;
 }
 
+// Função para verificar se um valor está presente na lista
+int is_value_in_list(IntListNode *head, int value) {
+    IntListNode *current = head;
+    while (current != NULL) {
+        if (current->value == value) {
+            return 1; // Valor encontrado
+        }
+        current = current->next;
+    }
+    return 0; // Valor não encontrado
+}
+
 // Função para adicionar um valor à lista de inteiros
 void add_to_int_list(IntListNode **head, int value) {
+    if (is_value_in_list(*head, value)) {
+        return; // Valor já existe na lista
+    }
+
     IntListNode *new_node = create_int_list_node(value);
     new_node->next = *head;
     *head = new_node;
 }
+
+// void add_to_int_list(IntListNode **head, int value) {
+//     IntListNode *new_node = create_int_list_node(value);
+//     new_node->next = *head;
+//     *head = new_node;
+// }
 
 // Função hash simples para strings
 unsigned int hash(const char *str) {
@@ -81,6 +109,7 @@ void add_to_hash_table(HashTable *hash_table, const char *word, int count) {
 
 // Função para imprimir a tabela hash
 void print_hash_table(HashTable *hash_table) {
+    printf("Tweets registrados na tabela hash: \n");
     for (int i = 0; i < hash_table->size; i++) {
         if (hash_table->table[i].word != NULL) {
             printf("Index %d: %s -> ", i, hash_table->table[i].word);
@@ -156,19 +185,17 @@ int *find_integers_for_word(HashTable *hash_table, const char *word, int *size) 
 
 int main() {
     //test();
-    printf("Pesquisar: ");
     char searchWord[20];
-    scanf("%s", searchWord);
-    
-    FILE *file = fopen("teste.csv", "r");
+    char option='S';
+    char line[1024];
+    int tweet_number = 0;
+    HashTable *hash_table = create_hash_table(TABLE_SIZE);
+
+    FILE *file = fopen("corpus.csv", "r");
     if (file == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return 0;
-    }
-    HashTable *hash_table = create_hash_table(TABLE_SIZE);
-    
-    char line[1024];
-    int tweet_number = 0;
+    }   
 
     // Ler o arquivo linha a linha
     while (fgets(line, sizeof(line), file)) {
@@ -204,20 +231,40 @@ int main() {
 
         tweet_number++; // Incrementar o número do tweet
     }
+    
+    //chama a função para imprimir todos os tweets da hash table
     print_hash_table(hash_table);
     int size;
-    //como buscar e exibir uma palavra especifica
-    int *integers = find_integers_for_word(hash_table, searchWord, &size);
-    if (integers != NULL) {
-        printf("\ntweets com a palavra '%s': ", searchWord);
-        for (int i = 0; i < size; i++) {
-            printf("%d ", integers[i]);
+
+    //loop para o usuário interagir
+    do{
+        printf("\nPesquisar palavra: ");    
+        scanf("%s", searchWord);
+
+
+        //como buscar e exibir uma palavra especifica
+        int *integers = find_integers_for_word(hash_table, searchWord, &size);
+        if (integers != NULL) {
+            printf("\nIndice(s) dos tweets com a palavra '%s': ", searchWord);
+            for (int i = 0; i < size; i++) {
+                printf("%d ", integers[i]);
+            }
+            printf("\n");
+            free(integers);
+        } else {
+            printf("palavra '%s' nao esta na tabela.\n", searchWord);
         }
-        printf("\n");
-        free(integers);
-    } else {
-        printf("palavra truco nao esta na tabela.\n");
-    }
+
+        // Pergunta ao usuário se ele quer continuar
+        printf("Deseja fazer uma nova consulta? (S/N): ");
+        scanf(" %c", &option);
+
+        if(option!= 'S' && option!= 's'){
+            printf("Programa finalizado.");
+            break;
+        }
+
+    } while (option == 'S' || option == 's'); //executa enquanto o usuário responder S ou s
 
     fclose(file);
 
