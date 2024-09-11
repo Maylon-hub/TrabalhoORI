@@ -160,7 +160,7 @@ int main() {
     char searchWord[20];
     scanf("%s", searchWord);
     
-    FILE *file = fopen("teste3.csv", "r");
+    FILE *file = fopen("teste.csv", "r");
     if (file == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return 0;
