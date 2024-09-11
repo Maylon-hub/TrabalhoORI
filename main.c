@@ -9,7 +9,7 @@
 #include <ctype.h>
 
 // Tamanho da tabela hash
-#define TABLE_SIZE 1578630 
+#define TABLE_SIZE 100000000 
 
 // Estrutura para lista de inteiros
 typedef struct IntListNode {
@@ -109,7 +109,7 @@ void add_to_hash_table(HashTable *hash_table, const char *word, int count) {
 
 // Função para imprimir a tabela hash
 void print_hash_table(HashTable *hash_table) {
-    printf("Tweets registrados na tabela hash: \n");
+    printf("Palavras registradas na tabela hash: \n");
     for (int i = 0; i < hash_table->size; i++) {
         if (hash_table->table[i].word != NULL) {
             printf("Index %d: %s -> ", i, hash_table->table[i].word);
